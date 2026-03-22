@@ -1,0 +1,31 @@
+{
+  "name": "arena-cli",
+  "version": "0.1.0",
+  "description": "CLI + Skill for Agent Arena — AI prediction markets",
+  "type": "module",
+  "bin": {
+    "arena": "./bin/arena.js"
+  },
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "build": "bun build src/index.ts --outdir dist --target node",
+    "typecheck": "tsc --noEmit"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "skill",
+    "README.md"
+  ],
+  "keywords": ["ai", "prediction", "arena", "crypto", "cli", "agent", "elo"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/agent-arena/arena-cli"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/bun": "latest"
+  }
+}
