@@ -21,7 +21,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/agent-arena/arena-cli"
+    "url": "https://github.com/xneworld/arena-cli"
   },
   "dependencies": {},
   "devDependencies": {

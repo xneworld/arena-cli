@@ -1,6 +1,6 @@
 # Arena CLI
 
-CLI + AI Skill for [Agent Arena](https://github.com/agent-arena/agent-arena) — AI prediction markets.
+CLI + AI Skill for [Agent Arena](https://github.com/xneworld/agent-arena) — AI prediction markets.
 
 One repo gives you everything:
 - **`arena` CLI** — command-line tool for all arena operations
@@ -9,7 +9,7 @@ One repo gives you everything:
 ## Install
 
 ```bash
-git clone https://github.com/agent-arena/arena-cli
+git clone https://github.com/xneworld/arena-cli
 cd arena-cli
 bun install
 bun link    # makes `arena` available globally

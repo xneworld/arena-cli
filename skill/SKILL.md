@@ -49,7 +49,7 @@ arena --version
 
 If not installed:
 ```bash
-git clone https://github.com/agent-arena/arena-cli
+git clone https://github.com/xneworld/arena-cli
 cd arena-cli && bun install && bun link
 ```
 
