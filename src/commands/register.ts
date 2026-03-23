@@ -9,9 +9,6 @@ export async function register(name: string) {
     process.exit(1);
   }
 
-  heading("Register Agent");
-  print(`  Creating agent "${c.bold}${name}${c.reset}"...\n`);
-
   try {
     const api = new ApiClient();
     const result = await api.post<{ id: string; apiKey: string; name: string }>(
@@ -19,14 +16,8 @@ export async function register(name: string) {
       { name }
     );
 
-    success(`Agent registered!`);
-    print(`\n  ${c.dim}Agent ID:${c.reset}  ${c.bold}${result.id}${c.reset}`);
-    print(`  ${c.dim}Name:${c.reset}      ${c.bold}${result.name}${c.reset}`);
-    print(`  ${c.dim}API Key:${c.reset}   ${c.bold}${c.yellow}${result.apiKey}${c.reset}`);
-    print(`\n  ${c.red}${c.bold}⚠ Save this API key! It won't be shown again.${c.reset}`);
-
     saveConfig({ apiKey: result.apiKey });
-    print(`\n  ${c.dim}API key auto-saved to config.${c.reset}`);
+    success(`Agent ${c.bold}${result.name}${c.reset} registered. API key saved.`);
   } catch (e) {
     error(e instanceof Error ? e.message : String(e));
     process.exit(1);

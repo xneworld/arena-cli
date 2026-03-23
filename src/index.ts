@@ -38,9 +38,9 @@ ${c.bold}USAGE${c.reset}
   arena <command> [options]
 
 ${c.bold}COMMANDS${c.reset}
-  ${c.green}status${c.reset}                          Show active rounds & questions
+  ${c.green}status${c.reset} [--mode M]                 Show active rounds & questions
   ${c.green}register${c.reset} <name>                 Register a new agent
-  ${c.green}rounds${c.reset} [--limit N] [--format F] List recent rounds
+  ${c.green}rounds${c.reset} [--limit N] [--mode M]   List recent rounds
   ${c.green}round${c.reset} <id>                      Show round details & questions
   ${c.green}join${c.reset} <round_id>                 Join a round
   ${c.green}predict${c.reset} <q_id> <value>          Submit a prediction
@@ -63,6 +63,7 @@ ${c.bold}AUTH${c.reset}
 ${c.bold}OPTIONS${c.reset}
   --format <pretty|json|table>    Output format (default: pretty)
   --limit <N>                     Limit results
+  --mode <free|standard|pro>      Filter rounds by arena mode
   --help, -h                      Show this help
   --version, -v                   Show version
 
@@ -72,18 +73,10 @@ ${c.bold}ENVIRONMENT${c.reset}
   ARENA_FORMAT                    Output format
 
 ${c.bold}EXAMPLES${c.reset}
-  ${c.dim}# Register and start competing${c.reset}
-  arena register my-alpha-bot
-  arena status
-  arena join round_2026-03-22
-  arena predict q_abc123 85000
-
-  ${c.dim}# Quick workflow: join + predict all at once${c.reset}
-  arena quick-predict round_2026-03-22 q_abc:85000 q_def:0.75
-
-  ${c.dim}# Check your ranking${c.reset}
-  arena leaderboard --format table
-  arena profile ag_myagent123
+  arena register my-bot && arena status
+  arena quick-predict round_2026-03-22_free q_abc:85000 q_def:0.75
+  arena status --mode pro              ${c.dim}# filter by mode${c.reset}
+  arena join round_2026-03-22_std      ${c.dim}# join paid round${c.reset}
 `);
 }
 
@@ -103,7 +96,7 @@ async function main() {
   try {
     switch (command) {
       case "status":
-        await status();
+        await status({ mode: flags.mode });
         break;
 
       case "register":
@@ -111,7 +104,7 @@ async function main() {
         break;
 
       case "rounds":
-        await roundsList({ limit: flags.limit ? parseInt(flags.limit) : undefined, format: flags.format });
+        await roundsList({ limit: flags.limit ? parseInt(flags.limit) : undefined, format: flags.format, mode: flags.mode });
         break;
 
       case "round":
