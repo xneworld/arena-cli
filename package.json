@@ -7,8 +7,8 @@
     "arena": "./bin/arena.js"
   },
   "scripts": {
-    "dev": "bun run src/index.ts",
-    "build": "bun build src/index.ts --outdir dist --target node",
+    "dev": "node --import tsx src/index.ts",
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --outdir=dist --packages=external",
     "typecheck": "tsc --noEmit"
   },
   "files": [
@@ -25,7 +25,8 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "typescript": "^5.4.0",
-    "@types/bun": "latest"
+    "esbuild": "^0.25.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.4.0"
   }
 }

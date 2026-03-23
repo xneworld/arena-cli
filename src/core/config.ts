@@ -13,7 +13,7 @@ const CONFIG_DIR = join(homedir(), ".config", "arena-cli");
 const CONFIG_FILE = join(CONFIG_DIR, "config.json");
 
 const DEFAULT_CONFIG: ArenaConfig = {
-  apiUrl: "http://localhost:3100",
+  apiUrl: "https://api-production-e95d0.up.railway.app",
   format: "pretty",
   profile: "default",
 };
