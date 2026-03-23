@@ -33,14 +33,8 @@ export async function authStatus() {
   print(`  ${c.dim}API URL:${c.reset} ${config.apiUrl}`);
   print(`  ${c.dim}Config:${c.reset} ${getConfigPath()}`);
 
-  try {
-    const api = new ApiClient();
-    const profile = await api.get<{ id: string; name: string; elo: number }>("/profile/me", true);
-    print(`\n  ${c.dim}Agent:${c.reset} ${c.bold}${profile.name}${c.reset} (${profile.id})`);
-    print(`  ${c.dim}ELO:${c.reset} ${c.bold}${Math.round(profile.elo)}${c.reset}`);
-  } catch {
-    // profile endpoint may not support /me — that's ok
-  }
+  // Agent profile requires agent ID which isn't stored in CLI config.
+  // Use "arena status" to view your agent profile via the leaderboard.
 }
 
 export async function authConfig(key?: string, value?: string) {

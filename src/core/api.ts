@@ -1,5 +1,7 @@
 import { loadConfig } from "./config.js";
 
+const REQUEST_TIMEOUT_MS = 30_000;
+
 export class ApiClient {
   private baseUrl: string;
   private apiKey?: string;
@@ -21,13 +23,23 @@ export class ApiClient {
     return h;
   }
 
+  private parseErrorBody(body: string): string {
+    try {
+      const json = JSON.parse(body);
+      return json.error || json.message || body;
+    } catch {
+      return body;
+    }
+  }
+
   async get<T>(path: string, auth = false): Promise<T> {
     const res = await fetch(`${this.baseUrl}${path}`, {
       headers: this.headers(auth),
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     });
     if (!res.ok) {
       const body = await res.text();
-      throw new Error(`API ${res.status}: ${body}`);
+      throw new Error(`API ${res.status}: ${this.parseErrorBody(body)}`);
     }
     return res.json();
   }
@@ -37,10 +49,11 @@ export class ApiClient {
       method: "POST",
       headers: this.headers(auth),
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     });
     if (!res.ok) {
       const text = await res.text();
-      throw new Error(`API ${res.status}: ${text}`);
+      throw new Error(`API ${res.status}: ${this.parseErrorBody(text)}`);
     }
     return res.json();
   }

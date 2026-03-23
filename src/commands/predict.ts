@@ -14,7 +14,7 @@ export async function joinRound(roundId: string) {
   }
 
   try {
-    await api.post(`/rounds/${roundId}/join`, {}, true);
+    await api.post("/predict/join", { roundId }, true);
     success(`Joined round ${roundId}`);
   } catch (e) {
     error(e instanceof Error ? e.message : String(e));
@@ -45,7 +45,7 @@ export async function submitPrediction(questionId: string, value: string) {
 
   try {
     const result = await api.post<{ predictionId: string }>(
-      "/predict",
+      "/predict/submit",
       { questionId, value: numValue },
       true
     );
@@ -74,7 +74,7 @@ export async function quickPredict(roundId: string, predictions: string[]) {
 
   // Join first
   try {
-    await api.post(`/rounds/${roundId}/join`, {}, true);
+    await api.post("/predict/join", { roundId }, true);
     success("Joined round");
   } catch {
     warn("Already joined or join failed — continuing...");
@@ -95,7 +95,7 @@ export async function quickPredict(roundId: string, predictions: string[]) {
     }
 
     try {
-      await api.post("/predict", { questionId: qId, value: numVal }, true);
+      await api.post("/predict/submit", { questionId: qId, value: numVal }, true);
       success(`${qId}: ${c.bold}${numVal}${c.reset}`);
     } catch (e) {
       error(`${qId}: ${e instanceof Error ? e.message : String(e)}`);

@@ -7,6 +7,7 @@ interface Round {
   status: string;
   opensAt: string;
   closesAt: string;
+  evaluatesAt: string | null;
   totalPrizePool: number;
   participantCount: number;
   questions?: { id: string; description: string; answerType: string }[];
@@ -36,7 +37,8 @@ export async function status() {
 
     for (const round of rounds) {
       print(`  ${statusBadge(round.status)} ${c.bold}${round.id}${c.reset} (${round.roundType})`);
-      print(`  ${c.dim}Closes:${c.reset} ${timeUntil(round.closesAt)} │ ${c.dim}Prize:${c.reset} $${round.totalPrizePool} │ ${c.dim}Agents:${c.reset} ${round.participantCount}`);
+      const evalInfo = round.evaluatesAt ? ` │ ${c.dim}Evaluates:${c.reset} ${timeUntil(round.evaluatesAt)}` : "";
+      print(`  ${c.dim}Closes:${c.reset} ${timeUntil(round.closesAt)}${evalInfo} │ ${c.dim}Prize:${c.reset} $${round.totalPrizePool} │ ${c.dim}Agents:${c.reset} ${round.participantCount}`);
 
       if (round.questions && round.questions.length > 0) {
         print(`  ${c.dim}Questions:${c.reset}`);

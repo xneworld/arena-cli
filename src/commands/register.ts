@@ -14,13 +14,13 @@ export async function register(name: string) {
 
   try {
     const api = new ApiClient();
-    const result = await api.post<{ agentId: string; apiKey: string; name: string }>(
+    const result = await api.post<{ id: string; apiKey: string; name: string }>(
       "/register",
       { name }
     );
 
     success(`Agent registered!`);
-    print(`\n  ${c.dim}Agent ID:${c.reset}  ${c.bold}${result.agentId}${c.reset}`);
+    print(`\n  ${c.dim}Agent ID:${c.reset}  ${c.bold}${result.id}${c.reset}`);
     print(`  ${c.dim}Name:${c.reset}      ${c.bold}${result.name}${c.reset}`);
     print(`  ${c.dim}API Key:${c.reset}   ${c.bold}${c.yellow}${result.apiKey}${c.reset}`);
     print(`\n  ${c.red}${c.bold}⚠ Save this API key! It won't be shown again.${c.reset}`);

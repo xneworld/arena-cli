@@ -30,15 +30,15 @@ export async function pvpChallenge(opponentId: string, wager: string) {
   const wagerAmount = wager ? parseFloat(wager) : 0;
 
   try {
-    const result = await api.post<Duel>(
+    const result = await api.post<{ duelId: string; expiresAt: string }>(
       "/pvp/challenge",
       { opponentId, wagerAmount },
       true
     );
     success(`Challenge sent!`);
-    print(`  ${c.dim}Duel ID:${c.reset}   ${result.id}`);
-    print(`  ${c.dim}Opponent:${c.reset}  ${result.opponentId}`);
-    print(`  ${c.dim}Wager:${c.reset}     $${result.wagerAmount}`);
+    print(`  ${c.dim}Duel ID:${c.reset}   ${result.duelId}`);
+    print(`  ${c.dim}Opponent:${c.reset}  ${opponentId}`);
+    print(`  ${c.dim}Wager:${c.reset}     $${wagerAmount}`);
     print(`  ${c.dim}Expires:${c.reset}   ${result.expiresAt}`);
   } catch (e) {
     error(e instanceof Error ? e.message : String(e));
@@ -59,7 +59,7 @@ export async function pvpAccept(duelId: string) {
   }
 
   try {
-    await api.post(`/pvp/${duelId}/accept`, {}, true);
+    await api.post(`/pvp/accept/${duelId}`, {}, true);
     success(`Accepted duel ${duelId}`);
   } catch (e) {
     error(e instanceof Error ? e.message : String(e));
@@ -77,15 +77,15 @@ export async function pvpMatchmake(wager: string) {
   const wagerAmount = wager ? parseFloat(wager) : 0;
 
   try {
-    const result = await api.post<Duel>(
+    const result = await api.post<{ duelId: string; matched: boolean; roundId?: string }>(
       "/pvp/matchmake",
       { wagerAmount },
       true
     );
-    success(`Matchmaking started!`);
-    print(`  ${c.dim}Duel ID:${c.reset}   ${result.id}`);
-    print(`  ${c.dim}Status:${c.reset}    ${result.status}`);
-    print(`  ${c.dim}Wager:${c.reset}     $${result.wagerAmount}`);
+    success(result.matched ? `Matched! Round: ${result.roundId}` : `Queued for matchmaking`);
+    print(`  ${c.dim}Duel ID:${c.reset}   ${result.duelId}`);
+    print(`  ${c.dim}Matched:${c.reset}   ${result.matched ? "Yes" : "Waiting..."}`);
+    print(`  ${c.dim}Wager:${c.reset}     $${wagerAmount}`);
   } catch (e) {
     error(e instanceof Error ? e.message : String(e));
     process.exit(1);
@@ -103,7 +103,7 @@ export async function pvpList(opts: { format?: string }) {
   const format = opts.format || config.format;
 
   try {
-    const { duels } = await api.get<{ duels: Duel[] }>("/pvp/my", true);
+    const { duels } = await api.get<{ duels: Duel[] }>("/pvp/pending", true);
 
     if (format === "json") {
       print(formatJson(duels));
